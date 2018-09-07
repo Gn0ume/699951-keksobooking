@@ -3,7 +3,7 @@
 function getRandomInteger(min, max) {
   var randomNumber = min + Math.random() * (max + 1 - min);
   return Math.floor(randomNumber);
-};
+}
 
 function getRandomArrayElement(arr) {
   var min = 0;
@@ -11,7 +11,7 @@ function getRandomArrayElement(arr) {
   var randomElement = getRandomInteger(min, max);
 
   return arr[randomElement];
-};
+}
 
 function getMixArray(arr) {
   var j;
@@ -23,7 +23,7 @@ function getMixArray(arr) {
     arr[i] = temp;
   }
   return arr;
-};
+}
 
 function getArrRandomLength(arr) {
   var min = 0;
@@ -31,7 +31,7 @@ function getArrRandomLength(arr) {
   var randomIndex = getRandomInteger(min, max);
 
   return arr.slice(0, randomIndex);
-};
+}
 
 var photos = [
   'http://o0.github.io/assets/images/tokyo/hotel1.jpg',
@@ -40,9 +40,9 @@ var photos = [
 ];
 
 function getPhotos(array) {
-  var photos = array.slice();
-  return getMixArray(photos);
-};
+  var arrPhotos = array.slice();
+  return getMixArray(arrPhotos);
+}
 
 var amountCards = 8;
 var titles = [
@@ -98,7 +98,7 @@ function getCards() {
     arrCards.push(card);
   }
   return arrCards;
-};
+}
 
 var map = document.querySelector('.map');
 map.classList.remove('map--faded');
@@ -107,7 +107,7 @@ map.classList.remove('map--faded');
 */
 var cards = getCards();
 
-function createPinElements (array) {
+function createPinElements(array) {
   var templatePin = document.querySelector('#pin').content.querySelector('.map__pin');
   var fragmentPins = document.createDocumentFragment();
   for (var i = 0; i < array.length; i++) {
@@ -119,12 +119,12 @@ function createPinElements (array) {
     fragmentPins.appendChild(pinElement);
   }
   return fragmentPins;
-};
+}
 
-function addPins () {
+function addPins() {
   var mapPins = document.querySelector('.map__pins');
   return mapPins.appendChild(createPinElements(cards));
-};
+}
 
 addPins();
 /*
@@ -133,7 +133,7 @@ addPins();
 
 var templateCard = document.querySelector('#card').content.querySelector('.map__card');
 
-function getFragmentFeatures (array) {
+function getFragmentFeatures(array) {
   var fragmentFeatures = document.createDocumentFragment();
 
   for (var i = 0; i < array.length; i++) {
@@ -144,9 +144,9 @@ function getFragmentFeatures (array) {
     fragmentFeatures.appendChild(newElement);
   }
   return fragmentFeatures;
-};
+}
 
-function getFragmentPhotos (array) {
+function getFragmentPhotos(array) {
   var fragmentPhotos = document.createDocumentFragment();
   var popupPhoto = document.querySelector('#card').content.querySelector('.popup__photo');
   for (var i = 0; i < array.length; i++) {
@@ -155,9 +155,9 @@ function getFragmentPhotos (array) {
     fragmentPhotos.appendChild(newElement);
   }
   return fragmentPhotos;
-};
+}
 
-function createNoticeElement (array) {
+function createNoticeElement(array) {
   var fragmentCards = document.createDocumentFragment();
   for (var i = 0; i < array.length; i++) {
     var cardElement = templateCard.cloneNode(true);
@@ -202,24 +202,23 @@ function createNoticeElement (array) {
     fragmentCards.appendChild(cardElement);
   }
   return fragmentCards;
-};
+}
 /*
 ДВА ВАРИАНТА ФУНКЦИИ
-function addNotice () {
+function addNotice() {
   var fragment = createNoticeElement(cards);
   var mapFiltersContainer = map.querySelector('.map__filters-container');
   var newNotices = fragment.querySelector('.map__card');
   return map.insertBefore(newNotices, mapFiltersContainer);
 };
-
 addNotice ();
 */
-function addNotice () {
+function addNotice() {
   var fragment = createNoticeElement(cards);
   var newNotices = fragment.querySelector('.map__card');
   return map.appendChild(newNotices);
-};
+}
 
-addNotice ();
+addNotice();
 
 
