@@ -106,9 +106,9 @@ map.classList.remove('map--faded');
 СОЗДАНИЕ ПИНА
 */
 var offers = getOffers();
+var templatePin = document.querySelector('#pin').content.querySelector('.map__pin');
 
 function renderPin(obj) {
-  var templatePin = document.querySelector('#pin').content.querySelector('.map__pin');
   var pinElement = templatePin.cloneNode(true);
   pinElement.style.top = obj.location.y + 'px';
   pinElement.style.left = obj.location.x + 'px';
@@ -198,8 +198,9 @@ function getTextCapacity(obj) {
   return textCapacity;
 }
 
+var templateCard = document.querySelector('#card').content.querySelector('.map__card');
+
 function createNoticeElement(obj) {
-  var templateCard = document.querySelector('#card').content.querySelector('.map__card');
   var cardElement = templateCard.cloneNode(true);
   cardElement.querySelector('.popup__title').textContent = obj.offer.title;
   cardElement.querySelector('.popup__text--address').textContent = obj.offer.address;
