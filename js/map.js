@@ -213,7 +213,7 @@ function createNoticeElement(obj) {
   return cardElement;
 }
 
-function addNotice(obj) {
+function openCard(obj) {
   var newNotice = createNoticeElement(obj);
   map.appendChild(newNotice);
   var popupClose = map.querySelector('.popup__close');
@@ -232,56 +232,52 @@ var adFormFieldSets = adForm.querySelectorAll('fieldset');
 var mapFilters = document.querySelector('.map__filters');
 var filterFormItems = mapFilters.querySelectorAll('.map__filters > *');
 var address = adForm.querySelector('#address');
-var Coords = getAddress(mapPinMain);
+var firstCoords = getAddress(mapPinMain);
 
-changeFieldFilterForm(filterFormItems);
-changeFieldAdForm(adFormFieldSets);
-setAddress(Coords);
+changeAvailabilityFields(filterFormItems);
+changeAvailabilityFields(adFormFieldSets);
+setAddress(firstCoords);
 
 map.addEventListener('click', onClickPin);
 mapPinMain.addEventListener('mouseup', onClickMainPin);
 
 function onClickPin(evt) {
   var pin = evt.target.closest('.map__pin:not(.map__pin--main)');
-  var mapCard = map.querySelector('.map__card');
   if (pin) {
     var id = pin.dataset.id;
     var data = offers[id];
-    if (mapCard) {
-      map.removeChild(mapCard);
-    }
-    addNotice(data);
+    closeCard();
+    openCard(data);
   }
 }
 
-function closeOffer() {
-  var mapCard = map.querySelector('.map__card');
-  map.removeChild(mapCard);
+function closeCard() {
+  var card = map.querySelector('.map__card');
+  if (card) {
+    card.remove();
+  }
   document.removeEventListener('keydown', onOfferEscPress);
 }
 
 function onClickCloseOffer() {
-  closeOffer();
+  closeCard();
 }
 
 function onOfferEscPress(evt) {
   if (evt.which === ESC_KEYCODE) {
-    closeOffer();
+    closeCard();
   }
 }
 
-function changeFieldAdForm(array) {
-  var isFormDisabled = map.classList.contains('map--faded');
-  for (var i = 0; i < array.length; i++) {
-    array[i].disabled = isFormDisabled;
+function changeAvailabilityFields(formFields) {
+  var isFormDisabled = isMapDisabled();
+  for (var i = 0; i < formFields.length; i++) {
+    formFields[i].disabled = isFormDisabled;
   }
 }
 
-function changeFieldFilterForm(array) {
-  var isFormDisabled = map.classList.contains('map--faded');
-  for (var i = 0; i < array.length; i++) {
-    array[i].disabled = isFormDisabled;
-  }
+function isMapDisabled() {
+  return map.classList.contains('map--faded');
 }
 
 function activatePage() {
@@ -292,8 +288,8 @@ function activatePage() {
 function onClickMainPin() {
   activatePage();
   addPins(offers);
-  changeFieldAdForm(adFormFieldSets);
-  changeFieldFilterForm(filterFormItems);
+  changeAvailabilityFields(adFormFieldSets);
+  changeAvailabilityFields(filterFormItems);
   var addressCoords = getAddress(mapPinMain);
   setAddress(addressCoords);
 }
