@@ -10,17 +10,6 @@ var filters = document.querySelector('.map__filters-container');
 var photosfragment = document.createDocumentFragment();
 var fragment = document.createDocumentFragment();
 
-var avatars = [
-  'img/avatars/user01.png',
-  'img/avatars/user02.png',
-  'img/avatars/user03.png',
-  'img/avatars/user04.png',
-  'img/avatars/user05.png',
-  'img/avatars/user06.png',
-  'img/avatars/user07.png',
-  'img/avatars/user08.png'
-];
-
 var names = [
   'Большая уютная квартира',
   'Маленькая неуютная квартира',
@@ -61,19 +50,30 @@ var facilities = [
   'conditioner'
 ];
 
-var pictures = [
-  'http://o0.github.io/assets/images/tokyo/hotel1.jpg',
-  'http://o0.github.io/assets/images/tokyo/hotel2.jpg',
-  'http://o0.github.io/assets/images/tokyo/hotel3.jpg'
-];
+var generateByTemp = function (str, count) {
+  var arr = [];
+  for (var i = 0; i < count; i++) {
+    arr.push(str.replace('${pic}', i + 1));
+  };
+  return arr;
+};
+
+var picTemplate = 'http://o0.github.io/assets/images/tokyo/hotel${pic}.jpg'
+var qtyPic = 3;
+var pictures = generateByTemp(picTemplate, qtyPic);
+
+var avaTemplate = 'img/avatars/user0${pic}.png';
+var usersCount = 8;
+var avatars = generateByTemp(avaTemplate, usersCount);
+
 
 var getRandomInteger = function (min, max) {
     return Math.floor(min + Math.random() * (max + 1 - min));
 };
 
 var getMixedArray = function (arr) {
-  for(var i = arr.length - 1; i > 0; i--){
-    var j = Math.floor(Math.random() * (i + 1));
+  for(var i = arr.length - 1; i >= 0; i--){
+    var j = getRandomInteger(0, arr.length - 1);
     var temp = arr[i];
     arr[i] = arr[j];
     arr[j] = temp;
@@ -97,7 +97,8 @@ var getRandomElement = function (arr) {
 
 getMixedArray(avatars);
 
-var getElements = function (arr, arrLength) {
+var getElements = function (arrLength) {
+  var arr = [];
   for (var i = 0; i < arrLength; i++) {
     var obj = {};
 
@@ -108,7 +109,7 @@ var getElements = function (arr, arrLength) {
 
     obj.offer = {
       title: getRandomElement(names),
-      address: obj.location.x + ' ,' + obj.location.y,
+      address: obj.location.x + ', ' + obj.location.y,
       price: getRandomInteger(1000, 1000000),
       type: getRandomElement(types),
       rooms: getRandomInteger(1, 5),
@@ -130,12 +131,11 @@ var getElements = function (arr, arrLength) {
 };
 
 var itemListLength = 8;
-var items = [];
-getElements(items, itemListLength);
+var items = getElements(itemListLength);
 
 for (var i = 0; i < items.length; i++) {
   var pinElement = pinTemplate.cloneNode(true);
-  pinElement.style = 'left: ' + (items[i].location.x - 25) + 'px; top: ' + (items[i].location.y - 70) + 'px;';
+  pinElement.style = `left: ${items[i].location.x - 25}px; top: ${items[i].location.y - 70}px;`;
   pinElement.querySelector('img').src = items[i].author.avatar;
   pinElement.querySelector('img').alt = items[i].offer.title;
 
@@ -149,10 +149,10 @@ for (var i = 0; i < items.length; i++) {
   var cardElement = cardTemplate.cloneNode(true);
   cardElement.querySelector('.popup__title').textContent = items[i].offer.title;
   cardElement.querySelector('.popup__text--address').textContent = items[i].offer.address;
-  cardElement.querySelector('.popup__text--price').innerHTML = items[i].offer.price + '₽/ночь';
+  cardElement.querySelector('.popup__text--price').innerHTML = `${items[i].offer.price} ₽/ночь`;
   cardElement.querySelector('.popup__type').textContent = typesRus[items[i].offer.type];
-  cardElement.querySelector('.popup__text--capacity').innerHTML = items[i].offer.rooms + ' комнат(ы) для ' + items[i].offer.guests + ' гостей';
-  cardElement.querySelector('.popup__text--time').innerHTML = 'Заезд после ' + items[i].offer.checkin + ', выезд до ' + items[i].offer.checkout;
+  cardElement.querySelector('.popup__text--capacity').innerHTML = `${items[i].offer.rooms} комнат(ы) для ${items[i].offer.guests} гостей`;
+  cardElement.querySelector('.popup__text--time').innerHTML = `Заезд после ${items[i].offer.checkin}, выезд до ${items[i].offer.checkout}`;
 
   var listFeatures = cardTemplate.querySelector('.popup__features');
   listFeatures.innerHTML = '';
